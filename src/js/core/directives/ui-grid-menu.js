@@ -244,6 +244,26 @@ function ($compile, $timeout, $window, $document, gridUtil, uiGridConstants) {
             }
           };
 
+          $scope.edit = function($event) {
+            var context = {};
+
+            if ($scope.context) {
+              context.context = $scope.context;
+            }
+            $event.stopPropagation();
+            uiGridCtrl.grid.appScope.editAttribute(context.context.gridCol);
+          };
+
+          $scope.delete = function($event) {
+            var context = {};
+
+            if ($scope.context) {
+              context.context = $scope.context;
+            }
+            $event.stopPropagation();
+            uiGridCtrl.grid.appScope.deleteAttribute(context.context.gridCol);
+          };
+
           $scope.i18n = i18nService.get();
         }
       };
