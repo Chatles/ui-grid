@@ -1,4 +1,4 @@
-angular.module('ui.grid').directive('uiGridCell', ['$compile', '$parse', 'gridUtil', 'uiGridConstants', '$timeout', function ($compile, $parse, gridUtil, uiGridConstants, $timeout) {
+angular.module('ui.grid').directive('uiGridCell', ['$compile', '$parse', 'gridUtil', 'uiGridConstants', '$timeout', 'uiGridEditConstants', '$rootScope', function ($compile, $parse, gridUtil, uiGridConstants, $timeout, uiGridEditConstants, $rootScope) {
   var uiGridCell = {
     priority: 0,
     scope: false,
@@ -103,6 +103,7 @@ angular.module('ui.grid').directive('uiGridCell', ['$compile', '$parse', 'gridUt
           $elm.on( '$destroy', deregisterFunction );
 
           $scope.dblclickCell = function(event) {
+            $rootScope.$broadcast(uiGridEditConstants.events.END_CELL_EDIT);
             if (event.target.name !== "hover-edit-cell") {
               event.stopPropagation()
             }
