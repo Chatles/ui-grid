@@ -190,6 +190,18 @@ angular.module('ui.grid')
         }
       }
 
+      var clearFilters = [{
+        title: i18nService.getSafeText('gridMenu.clearAllFilters'),
+        action: function ($event) {
+          $scope.grid.clearAllFilters(undefined, true, undefined);
+        },
+        shown: function() {
+          return $scope.grid.options.enableFiltering;
+        },
+        order: 100
+      }];
+      menuItems = menuItems.concat( clearFilters );
+
       menuItems = menuItems.concat( $scope.registeredMenuItems );
 
       if ( $scope.grid.options.gridMenuShowHideColumns !== false ){
@@ -238,11 +250,11 @@ angular.module('ui.grid')
         return showHideColumns;
       }
 
-      //// add header for columns
-      //showHideColumns.push({
-      //  title: i18nService.getSafeText('gridMenu.columns'),
-      //  order: 300
-      //});
+      // add header for columns
+      showHideColumns.push({
+        title: i18nService.getSafeText('gridMenu.columns'),
+        order: 300
+      });
 
       $scope.grid.options.gridMenuTitleFilter = $scope.grid.options.gridMenuTitleFilter ? $scope.grid.options.gridMenuTitleFilter : function( title ) { return title; };
 
@@ -364,19 +376,24 @@ angular.module('ui.grid')
 
 
 
-.directive('uiGridMenuButton', ['gridUtil', 'uiGridConstants', 'uiGridGridMenuService',
-function (gridUtil, uiGridConstants, uiGridGridMenuService) {
+.directive('uiGridMenuButton', ['gridUtil', 'uiGridConstants', 'uiGridGridMenuService', 'i18nService',
+function (gridUtil, uiGridConstants, uiGridGridMenuService, i18nService) {
 
   return {
     priority: 0,
     scope: true,
-    require: ['?^uiGrid'],
+    require: ['^uiGrid'],
     templateUrl: 'ui-grid/ui-grid-menu-button',
     replace: true,
 
 
     link: function ($scope, $elm, $attrs, controllers) {
       var uiGridCtrl = controllers[0];
+
+      // For the aria label
+      $scope.i18n = {
+        aria: i18nService.getSafeText('gridMenu.aria')
+      };
 
       uiGridGridMenuService.initialize($scope, uiGridCtrl.grid);
 
@@ -395,6 +412,7 @@ function (gridUtil, uiGridConstants, uiGridGridMenuService) {
 
       $scope.$on('menu-hidden', function() {
         $scope.shown = false;
+        gridUtil.focus.bySelector($elm, '.ui-grid-icon-container');
       });
     }
   };
