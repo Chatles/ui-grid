@@ -105,13 +105,13 @@ angular.module('ui.grid').directive('uiGridCell', ['$compile', '$parse', 'gridUt
           $scope.dblclickCell = function(event) {
             $rootScope.$broadcast(uiGridEditConstants.events.END_CELL_EDIT);
             if (event.target.name !== "hover-edit-cell") {
-              event.stopPropagation()
+              event.stopPropagation();
             }
           };
 
           $scope.editCell = function(event) {
             $timeout(function(){
-              $(event.target).dblclick()
+              $(event.target).dblclick();
             }, 0, false);
           };
 
