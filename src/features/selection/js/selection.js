@@ -458,7 +458,8 @@
          * @param {bool} noUnselect if true then rows cannot be unselected
          */
         toggleRowSelection: function (grid, row, evt, multiSelect, noUnselect) {
-          var selected = row.isSelected;
+          // Customize for Docs project: row.isSelected have been changed to true in checkbox which have ng-model property
+          var selected = !row.isSelected;
 
           if ( row.enableSelection === false && !selected ){
             return;
