@@ -177,6 +177,11 @@
                 selectRow: function (rowEntity, evt) {
                   var row = grid.getRow(rowEntity);
                   if (row !== null && !row.isSelected) {
+
+                    // Customize for Docs project, for fixing Docs implement row selection by checkbox other than ui-grid's implementation.
+                    // row.isSelected is set to !row.isSelected here because isSelected is set to the inverse in service.toggleRowSelection function.
+                    row.isSelected = !row.isSelected;
+
                     service.toggleRowSelection(grid, row, evt, grid.options.multiSelect, grid.options.noUnselect);
                   }
                 },
