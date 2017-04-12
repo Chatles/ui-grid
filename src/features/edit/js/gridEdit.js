@@ -482,6 +482,19 @@
               return;
             }
 
+            $scope.dblclickCell = function(event) {
+              $rootScope.$broadcast(uiGridEditConstants.events.END_CELL_EDIT);
+              if (event.target.id !== "ui-grid-hover-edit-cell") {
+                event.stopPropagation();
+              }
+            };
+
+            $scope.editCell = function(event) {
+              $timeout(function() {
+                $(event.target).dblclick();
+              }, 0, false);
+            };
+
             var cellNavNavigateDereg = function() {};
             var viewPortKeyDownDereg = function() {};
 

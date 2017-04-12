@@ -295,9 +295,30 @@ function ($compile, $timeout, $window, $document, gridUtil, uiGridConstants, i18
                  * Ideally the focus would remain on the item.
                  * However, since there are two menu items that have their 'show' property toggled instead. This is a quick fix.
                  */
-                gridUtil.focus.bySelector(angular.element(gridUtil.closestElm($elm, ".ui-grid-menu-items")), 'button[type=button]', true);
+                // comment this because cannot get parent element of $elm in dm feature: custom attributes.
+                //gridUtil.focus.bySelector(angular.element(gridUtil.closestElm($elm, ".ui-grid-menu-items")), 'button[type=button]', true);
               }
             }
+          };
+
+          $scope.edit = function($event) {
+            var context = {};
+
+            if ($scope.context) {
+              context.context = $scope.context;
+            }
+            $event.stopPropagation();
+            uiGridCtrl.grid.appScope.editAttribute(context.context.gridCol);
+          };
+
+          $scope.delete = function($event) {
+            var context = {};
+
+            if ($scope.context) {
+              context.context = $scope.context;
+            }
+            $event.stopPropagation();
+            uiGridCtrl.grid.appScope.deleteAttribute(context.context.gridCol);
           };
 
           $scope.i18n = i18nService.get();

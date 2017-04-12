@@ -259,21 +259,37 @@ angular.module('ui.grid')
       $scope.grid.options.gridMenuTitleFilter = $scope.grid.options.gridMenuTitleFilter ? $scope.grid.options.gridMenuTitleFilter : function( title ) { return title; };
 
       $scope.grid.options.columnDefs.forEach( function( colDef, index ){
+
+        var updateAttributeVisibility = function(colDef) {
+          if (colDef.id) {
+            colDef.updateAttributeVisibility(colDef.id, !colDef.visible);
+          } else {
+            gridUtil.logError('column id is null');
+          }
+        };
+
         if ( colDef.enableHiding !== false ){
           // add hide menu item - shows an OK icon as we only show when column is already visible
           var menuItem = {
             icon: 'ui-grid-icon-ok',
             action: function($event) {
               $event.stopPropagation();
+              if ( colDef.attribute_type ) {
+                updateAttributeVisibility(this.context.gridCol.colDef);
+              }
               service.toggleColumnVisibility( this.context.gridCol );
             },
             shown: function() {
               return this.context.gridCol.colDef.visible === true || this.context.gridCol.colDef.visible === undefined;
             },
+            //templateUrl: 'ui-grid/uiGridMenuItemWithEditDelete',
             context: { gridCol: $scope.grid.getColumn(colDef.name || colDef.field) },
             leaveOpen: true,
             order: 301 + index * 2
           };
+          if ( colDef.attribute_type ) {
+            menuItem.templateUrl = 'ui-grid/uiGridMenuItemWithEditDelete';
+          }
           service.setMenuItemTitle( menuItem, colDef, $scope.grid );
           showHideColumns.push( menuItem );
 
@@ -282,15 +298,22 @@ angular.module('ui.grid')
             icon: 'ui-grid-icon-cancel',
             action: function($event) {
               $event.stopPropagation();
+              if ( colDef.attribute_type ) {
+                updateAttributeVisibility(this.context.gridCol.colDef);
+              }
               service.toggleColumnVisibility( this.context.gridCol );
             },
             shown: function() {
               return !(this.context.gridCol.colDef.visible === true || this.context.gridCol.colDef.visible === undefined);
             },
+            //templateUrl: 'ui-grid/uiGridMenuItemWithEditDelete',
             context: { gridCol: $scope.grid.getColumn(colDef.name || colDef.field) },
             leaveOpen: true,
             order: 301 + index * 2 + 1
           };
+          if ( colDef.attribute_type ) {
+            menuItem.templateUrl = 'ui-grid/uiGridMenuItemWithEditDelete';
+          }
           service.setMenuItemTitle( menuItem, colDef, $scope.grid );
           showHideColumns.push( menuItem );
         }

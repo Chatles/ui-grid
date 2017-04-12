@@ -174,6 +174,11 @@
                 selectRow: function (rowEntity, evt) {
                   var row = grid.getRow(rowEntity);
                   if (row !== null && !row.isSelected) {
+
+                    // Customize for Docs project, for fixing Docs implement row selection by checkbox other than ui-grid's implementation.
+                    // row.isSelected is set to !row.isSelected here because isSelected is set to the inverse in service.toggleRowSelection function.
+                    row.isSelected = !row.isSelected;
+
                     service.toggleRowSelection(grid, row, evt, grid.options.multiSelect, grid.options.noUnselect);
                   }
                 },
@@ -464,7 +469,8 @@
          * @param {bool} noUnselect if true then rows cannot be unselected
          */
         toggleRowSelection: function (grid, row, evt, multiSelect, noUnselect) {
-          var selected = row.isSelected;
+          // Customize for Docs project: row.isSelected have been changed to true in checkbox which have ng-model property
+          var selected = !row.isSelected;
 
           if ( row.enableSelection === false && !selected ){
             return;
